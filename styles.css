@@ -1,0 +1,185 @@
+*{
+    margin:0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+body {
+    background-color: #78c1f3;
+    
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Style for the content box */
+.container {
+    background-color: white;
+    width: 90%;
+    max-width: 500px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    
+}
+  
+.heading{
+    border: none solid black ;
+    margin-bottom: 15px;
+    font-size: 32px;
+    font-weight: 600;
+    font-family:'Poppins';
+}
+.header{
+    display: flex;
+    justify-content:center;
+    gap:10px;
+}
+.nb{
+    height: 37px;
+}
+.plus{
+    height: 55px;
+    cursor: pointer;
+}
+/* Main container style remains the same */
+.container {
+    background-color: white;
+    width: 90%;
+    max-width: 500px;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Input fields and the plus sign alignment */
+.input-box {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; /* Aligns input fields with the plus sign */
+    background: #edeef0;
+    border-radius: 30px;
+    margin-bottom: 25px;
+    padding: 10px;
+}
+
+/* Adjust date and text input alignment */
+input[type=text] {
+    width: 65%; /* Adjust width for better alignment */
+    flex-grow: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    opacity: 0.8;
+    padding: 12px 20px;
+    font-size: 18px;
+}
+
+input[type=date] {
+    width: 30%; /* Smaller width for date */
+    background-color: transparent;
+    border: none;
+    margin-right: 10px;
+    text-align: center; /* Center the date input */
+}
+
+/* Task list styling */
+ul.list-items {
+    padding: 0;
+    margin-top: 15px;
+}
+
+.list-items li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Ensure space between text and buttons */
+    background: #edeef0;
+    margin-bottom: 10px;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+/* Flex properties for task text and date */
+li div {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Aligns text and date properly */
+    width: 100%;
+}
+
+li span:first-of-type {
+    flex-grow: 1; /* Task text takes most of the space */
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+li span:nth-of-type(2) {
+    margin-left: 10px;
+    flex-grow: 0; /* Task due date takes less space */
+    text-align: right;
+}
+
+/* Button styling remains */
+li button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+
+button {
+    border: none; 
+    background: transparent;
+    padding: 0;
+    cursor: pointer; 
+}
+  h5 {
+    text-align: center;
+    margin-bottom: 10px;
+    color: green;
+  }
+
+form{
+    display: flex;
+    justify-content: flex-end;
+}
+.alert {
+    display: none;
+    padding: 10px;
+    border-radius: 0.5rem;
+    background-color: #f44336;
+    color: white;
+    opacity: 1; 
+    margin-bottom: 15px;
+
+    position: fixed; 
+    top: 10px; 
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Adjust to center properly */
+    box-sizing: border-box; /* Ensures padding is included within the width */
+    transition: opacity 0.6s;
+    visibility: hidden; 
+}
+.alert.show{
+    visibility: visible;
+    display: block;
+    transition: opacity 0.6s;
+}
+.alert.repeated, .alert.no-input,.alert.success{
+    background-color: limegreen;
+}
+.closebtn{
+    visibility: visible;
+    padding-left: 10px;
+    padding-top: 3px;
+    float: right;
+    font-size: 20px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.6s;
+}
+.closebtn:hover{
+    color: black;
+}
