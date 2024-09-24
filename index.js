@@ -16,30 +16,35 @@ document.addEventListener("DOMContentLoaded", function() {
         let newHtml = '';
 
         for (let i = 0; i < todoList.length; i++) {
-            let { text, dueDate, completed } = todoList[i];
-            let textDecoration = completed ? 'line-through' : 'none';
-            let checkmark = completed ? '✔' : '';
+            let { text, dueDate, deleted } = todoList[i];
+            let textDecoration = (deleted) ? 'line-through' : 'none';
+            let checkmark = (deleted) ? '✔' : '';
+            let deleteButtonStyle = deleted ? 'display: none;' : ''; // Hide delete button if deleted
+
             newHtml += `
             <li class="item">
                 <div class="task-info">
                     <span class="task-text" style="text-decoration: ${textDecoration};">
                         ${text}
                     </span>
-                    <span class="checkmark">${checkmark}</span>
                 </div>
                 <span class="task-date">
-                    (${dueDate || ''})
+                    ${dueDate || ''}
                 </span>
-                <button onclick="event.stopPropagation(); editTask(${i});">
+                <span class="checkmark">${checkmark}</span>
+                
+                
+                <button id="btn" style="${deleteButtonStyle}" onclick="event.stopPropagation(); editTask(${i});" >
                     <img class="edit" src="pen1.png" alt="Edit" style="width: 52px; height: 52px; padding: 4px;">
                 </button>
-                <button onclick="event.stopPropagation(); deleteTask(${i});">
+                <button id="btn"  style="${deleteButtonStyle}" onclick="event.stopPropagation(); deleteTask(${i});">
                     <img class="delete" src="delete.png" alt="Delete" style="width: 25px; height: 28px;">
                 </button>
             </li>
             `;
         }
         displayElement.innerHTML = newHtml;
+       
     }
 
     //to create tasks
@@ -56,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function() {
             return;
         }
 
-        todoList.push({ text: taskText, dueDate: taskDate, completed: false });
+        todoList.push({ text: taskText, dueDate: taskDate, deleted:false });
         input.value = ''; // Clear input
         date.value = ''; // Clear date
         setAlert("Task added successfully!");
@@ -69,11 +74,11 @@ document.addEventListener("DOMContentLoaded", function() {
         let noInput = document.querySelector(".no-input");
         let repeatedTask = document.querySelector(".repeated");
         let success = document.querySelector(".success");
-
+        let del=document.querySelector(".delete");
         noInput.classList.remove('show');
         repeatedTask.classList.remove('show');
         success.classList.remove('show');
-
+        del.classList.remove('show');
         if (msg === "Please enter your task!") {
             noInput.classList.add('show');
         } else if (msg === "Task is already present in your list!") {
@@ -81,7 +86,9 @@ document.addEventListener("DOMContentLoaded", function() {
         } else if (msg === "Task added successfully!") {
             success.classList.add('show');
         }
-
+        else if (msg === "Task is completed!") {
+            success.classList.add('show');
+        }
         setTimeout(() => {
             noInput.classList.remove('show');
             repeatedTask.classList.remove('show');
@@ -89,16 +96,24 @@ document.addEventListener("DOMContentLoaded", function() {
         }, 3000);
     }
 
-    // to delete a task
     window.deleteTask = function(index) {
-        todoList[index].completed = !todoList[index].completed;
+        todoList[index].deleted = true;
+    
         localStorage.setItem("todoList", JSON.stringify(todoList));
-        displayTasks();
+        setAlert("Task is completed!");
+        displayTasks(); // Re-render the task list with updated status
     };
+    
 
     // to edit a task
     window.editTask = function(index) {
         let task = todoList[index];
+        
+        // Prevent editing if the task is deleted
+        if (task.deleted) {
+            return;
+        }
+
         let listItem = document.querySelectorAll(".item")[index];
 
         listItem.innerHTML = `
