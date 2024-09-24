@@ -1,9 +1,15 @@
 document.addEventListener("DOMContentLoaded", function() {
     let input = document.querySelector(".task-input");
-    let date=document.querySelector(".task-date");
-    let todoList = []; // Initialize the task list
+    let date = document.querySelector(".task-date");
+    let todoList = [];
+    let savedTasks = localStorage.getItem("todoList");
 
-    // Function to display tasks
+    if (savedTasks) {
+        todoList = JSON.parse(savedTasks);
+        displayTasks();
+    }
+
+    // to display tasks
     function displayTasks() {
         let displayElement = document.querySelector(".list-items");
         displayElement.innerHTML = '';
@@ -12,76 +18,58 @@ document.addEventListener("DOMContentLoaded", function() {
         for (let i = 0; i < todoList.length; i++) {
             let { text, dueDate, completed } = todoList[i];
             let textDecoration = completed ? 'line-through' : 'none';
-            let checkmark = completed ? '✔' : ''; // Add checkmark if completed
+            let checkmark = completed ? '✔' : '';
             newHtml += `
             <li class="item">
-                <div style="display: flex; align-items: center;">
-                    <span style="text-decoration: ${textDecoration};">
+                <div class="task-info">
+                    <span class="task-text" style="text-decoration: ${textDecoration};">
                         ${text}
                     </span>
-                    <span style="margin-left: 10px;">
-                        (${dueDate || 'No date'})
-                    </span>  <!-- Display the task date -->
-                    <span style="margin-left: 8px;">${checkmark}</span>
+                    <span class="checkmark">${checkmark}</span>
                 </div>
-
+                <span class="task-date">
+                    (${dueDate || ''})
+                </span>
                 <button onclick="event.stopPropagation(); editTask(${i});">
-                    <img class="edit"
-                        src="pen1.png" 
-                        alt="Edit" 
-                        style="width: 52px; height: 52px; padding: 4px;" 
-                    >
+                    <img class="edit" src="pen1.png" alt="Edit" style="width: 52px; height: 52px; padding: 4px;">
                 </button>
                 <button onclick="event.stopPropagation(); deleteTask(${i});">
-                    <img 
-                        src="delete.png" 
-                        alt="Delete" 
-                        style="width: 25px; height: 28px;" 
-                    >
+                    <img class="delete" src="delete.png" alt="Delete" style="width: 25px; height: 28px;">
                 </button>
             </li>
-        `;
-
+            `;
         }
         displayElement.innerHTML = newHtml;
     }
 
-    // Function to create tasks
+    //to create tasks
     function createTasks() {
-        
-        let taskText = input.value.trim(); 
-        let taskDate=date.value;
-        
+        let taskText = input.value.trim();
+        let taskDate = date.value;
         if (taskText === '') {
-            // alert('Task cannot be empty!'); // Alert if input is empty
-            setAlert("Please enter your task!")
-            return; // Stop further execution if the input is empty
+            setAlert("Please enter your task!");
+            return;
         }
 
-        // Check if the task already exists
-        else if (todoList.some(task => task.text === taskText)) {
+        if (todoList.some(task => task.text === taskText)) {
             setAlert("Task is already present in your list!");
             return;
         }
-        else{
-            todoList.push({ text: taskText, dueDate:taskDate, completed: false }); // Add task to the list
-            input.value = ''; // Clear the input field
-            date.value='';
-            setAlert("Task added successfully!"); // Call alert with matching message
-            displayTasks(); // Update the displayed list
 
-        }
-        // repeatedTask.style.display="block";
-       
+        todoList.push({ text: taskText, dueDate: taskDate, completed: false });
+        input.value = ''; // Clear input
+        date.value = ''; // Clear date
+        setAlert("Task added successfully!");
+        displayTasks();
+        localStorage.setItem("todoList", JSON.stringify(todoList));
     }
 
-    function setAlert(msg){
-       
+    // to show alert messages
+    function setAlert(msg) {
         let noInput = document.querySelector(".no-input");
         let repeatedTask = document.querySelector(".repeated");
-        let success=document.querySelector(".success");
+        let success = document.querySelector(".success");
 
-         // Hide all alerts first
         noInput.classList.remove('show');
         repeatedTask.classList.remove('show');
         success.classList.remove('show');
@@ -99,88 +87,73 @@ document.addEventListener("DOMContentLoaded", function() {
             repeatedTask.classList.remove('show');
             success.classList.remove('show');
         }, 3000);
-        
-        let close=document.querySelectorAll(".closebtn");
-        close.forEach(btn=>{
-            btn.onclick=function(){
-                let div=this.parentElement;
-                div.style.opacity="0";
-                setTimeout(function(){
-                    div.style.display="none";
-                },600);
-            }
-        });
-            
     }
-    window.deleteTask = function(index) {
-        // Toggle the completed status
-        todoList[index].completed = !todoList[index].completed;
 
-        displayTasks(); 
+    // to delete a task
+    window.deleteTask = function(index) {
+        todoList[index].completed = !todoList[index].completed;
+        localStorage.setItem("todoList", JSON.stringify(todoList));
+        displayTasks();
     };
 
-    //Edit task
+    // to edit a task
     window.editTask = function(index) {
-        let task = todoList[index]; // Get the task to edit
-        let listItem = document.querySelectorAll(".item")[index]; 
-    
-        // Replace the content with an input field to edit
+        let task = todoList[index];
+        let listItem = document.querySelectorAll(".item")[index];
+
         listItem.innerHTML = `
             <input type="text" class="updated" value="${task.text}" style="width: 30%; max-width: 200px;">
             <input type="date" class="newdate" value="${task.dueDate}">
-            <button class="done" style="font-size: 26px;  padding:3px;">
-            ✔   
+            <button class="done" style="font-size: 26px; padding: 3px;">
+                ✔
             </button>
         `;
-    
-        // Attach event listener to the "Done" button
+
         let doneButton = listItem.querySelector(".done");
         let updatedInput = listItem.querySelector(".updated");
-        let updatedDate=listItem.querySelector(".newdate");
+        let updatedDate = listItem.querySelector(".newdate");
+
         doneButton.addEventListener("click", function() {
             let updatedText = updatedInput.value.trim();
-    
             if (updatedText === '') {
-                alert("Task cannot be empty!"); // Ensure the updated task isn't empty
+                alert("Task cannot be empty!");
                 return;
             }
-    
-            // Update the task text
+
             todoList[index].text = updatedText;
-            todoList[index].dueDate=updatedDate.value;
-            // Re-display the updated list
+            todoList[index].dueDate = updatedDate.value;
             displayTasks();
-            setAlert("Task is successfully added!");
+            localStorage.setItem("todoList", JSON.stringify(todoList));
+            setAlert("Task updated successfully!");
         });
-    
-        // Optional: You can also add Enter key support for editing
+
         updatedInput.addEventListener("keypress", function(event) {
             if (event.key === "Enter") {
-                doneButton.click(); // Trigger the Done button on Enter key
+                doneButton.click();
             }
         });
     };
-    
-   
 
-    // event to trigger task addition when pressing Enter
+    let clearBtn = document.querySelector(".clear");
+    clearBtn.addEventListener("click", function() {
+        todoList = []; 
+        localStorage.removeItem("todoList"); 
+        displayTasks(); 
+    });
+
     input.addEventListener("keypress", function(event) {
         if (event.key === "Enter") {
-            event.preventDefault(); // Prevent form submission
-            createTasks(); 
+            event.preventDefault();
+            createTasks();
         }
     });
 
-    // Event for clicking the plus button
+    // Event for the plus button to create tasks
     document.querySelector(".plus").addEventListener("click", createTasks);
 
-    // Prevent default form submission
     document.querySelector("form").addEventListener("submit", function(event) {
-        event.preventDefault(); // Prevent form submission
+        event.preventDefault();
     });
 
-    // Initial call to display tasks (in case of any pre-existing tasks)
     displayTasks();
 });
-
-

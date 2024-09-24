@@ -83,8 +83,7 @@ input[type=date] {
     margin-right: 10px;
     text-align: center; /* Center the date input */
 }
-
-/* Task list styling */
+/* 
 ul.list-items {
     padding: 0;
     margin-top: 15px;
@@ -93,35 +92,51 @@ ul.list-items {
 .list-items li {
     display: flex;
     align-items: center;
-    justify-content: space-between; /* Ensure space between text and buttons */
+    justify-content: space-between;
     background: #edeef0;
     margin-bottom: 10px;
     padding: 10px 20px;
     border-radius: 5px;
+} */
+ul.list-items {
+    padding: 0;
+    margin-top: 15px;
+    list-style-type: none;
 }
 
-/* Flex properties for task text and date */
+.list-items li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #f0f2f5;
+    padding: 12px 20px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    word-wrap: break-word;
+}
+
+/* 
 li div {
     display: flex;
     align-items: center;
-    justify-content: flex-start; /* Aligns text and date properly */
+    justify-content: flex-start; 
     width: 100%;
 }
 
 li span:first-of-type {
-    flex-grow: 1; /* Task text takes most of the space */
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-}
+    flex-grow: 1; /* Task text takes most of the space 
+    text-overflow:initial; */
+    /* white-space: nowrap; */
+    /* overflow: hidden; */
 
-li span:nth-of-type(2) {
+
+/* li span:nth-of-type(2) {
     margin-left: 10px;
-    flex-grow: 0; /* Task due date takes less space */
+    flex-grow: 0;  Task due date takes less space 
     text-align: right;
 }
 
-/* Button styling remains */
+
 li button {
     background: transparent;
     border: none;
@@ -134,8 +149,8 @@ button {
     background: transparent;
     padding: 0;
     cursor: pointer; 
-}
-  h5 {
+} */ 
+  /* h5 {
     text-align: center;
     margin-bottom: 10px;
     color: green;
@@ -156,9 +171,9 @@ form{
 
     position: fixed; 
     top: 10px; 
-    left: 50%; /* Center horizontally */
-    transform: translateX(-50%); /* Adjust to center properly */
-    box-sizing: border-box; /* Ensures padding is included within the width */
+    left: 50%; 
+    transform: translateX(-50%);
+    box-sizing: border-box; 
     transition: opacity 0.6s;
     visibility: hidden; 
 }
@@ -182,4 +197,103 @@ form{
 }
 .closebtn:hover{
     color: black;
+}
+.clear {
+    background-color: limegreen;
+    width: 70px;
+    height: 40px;
+    font-size: 20px;
+    margin-top: 10px;
+    position: relative;
+    top: 96%;
+    left: 45%;
+    color: white;
+    border-radius: 1rem;
+} */
+
+
+.list-items li .task-info {
+    display: flex;
+    align-items: center;
+    flex-grow: 2;
+    margin-right: 10px;
+}
+
+.task-text {
+    text-decoration: none;
+    flex-grow: 1;
+    word-break: break-word;
+}
+
+.checkmark {
+    margin-left: 10px;
+}
+
+.task-date {
+    flex-grow: 1;
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* Button styles */
+button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+button img {
+    width: 25px;
+    height: 25px;
+}
+
+button.edit img {
+    width: 52px;
+    height: 52px;
+    padding: 4px;
+}
+
+/* Alert styles */
+.alert {
+    display: none;
+    padding: 10px;
+    border-radius: 0.5rem;
+    background-color: limegreen;
+    color: white;
+    margin-bottom: 15px;
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: opacity 0.6s;
+}
+
+.alert.show {
+    display: block;
+}
+
+.closebtn {
+    float: right;
+    font-size: 20px;
+    line-height: 20px;
+    cursor: pointer;
+}
+
+.closebtn:hover {
+    color: black;
+}
+
+/* Clear button */
+.clear {
+    background-color: limegreen;
+    width: 100px;
+    height: 40px;
+    font-size: 20px;
+    margin-top: 20px;
+    color: white;
+    border-radius: 1rem;
+    text-align: center;
+    line-height: 40px;
+    cursor: pointer;
+    align-self: center;
 }
